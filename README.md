@@ -8,7 +8,7 @@ A practical Java lens library for performing deeply nested updates on immutable 
 
 It creates declarative APIs for updating your code like this for free!   
 
-```
+```java
 updatedOrder = setConfirmationUpdateOn(LocalDateTime.now())
     .andThen(setApprovalStatus("COMPLETED"))
     .andThen(updateApprovalComments(comments -> comments.append(someFinalComment))
@@ -24,7 +24,7 @@ It picks up where Lombok's `with` leaves off.
 
 Easiest way to understand is with a quick example. 
 
-```
+```java
 @Value
 class PurchaseOrder {
     String number; 
