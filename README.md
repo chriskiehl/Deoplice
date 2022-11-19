@@ -1,4 +1,5 @@
-# Deoplice 
+![Deploice logo](https://github.com/chriskiehl/Deoplice/raw/master/images/logo-cropped.jpg)
+
 
 "to a great depth"
 
@@ -8,6 +9,38 @@ A practical Java lens library for performing deeply nested updates on immutable 
 
 It creates declarative APIs for updating your code like this for free!   
 
+
+## Quick Start 
+
+The Lens API is auto-generated for anything you annotate with `@Lensed`. 
+
+```java
+@With
+@Value
+@Lensed   // ← All it takes!
+class PurchaseOrder {
+    String number; 
+    Approval approval; 
+}
+@With
+@Value
+class Approval {
+    ApprovalStatus status;
+    Array<Comment> comments; 
+    Confirmation customer;
+}
+@With
+@Value
+class Confirmation {
+    UserAlias alias; 
+    LocalDateTime updatedOn; 
+}
+```
+
+>v0.0.1-alpha Note: Deoplice is currently symbiotic with `Lombok`. It depends on TODO. 
+
+And you get a lovely declarative, composable update API for the annotated class and all of its children. You can now make complex, deeply nested updates to your data using an API custom generated for your blah   
+
 ```java
 updatedOrder = setConfirmationUpdateOn(LocalDateTime.now())
     .andThen(setApprovalStatus("COMPLETED"))
@@ -16,7 +49,7 @@ updatedOrder = setConfirmationUpdateOn(LocalDateTime.now())
 ```
 
 
-What's a Lens? It doesn't matter! It's some gobbledygook from functional programming. They're basically getters and setters that compose really well. The only problem with them is that then can be super awkward to use in Java and require a lot of boilerplate. 
+ 
 
 It picks up where Lombok's `with` leaves off. 
 
@@ -81,11 +114,16 @@ completedOrders = pendingOrders.stream().map(setApprovalStatus("Completed")).toL
 
 ## Lower level lens API
 
-If you don't want to use the higher level DSL, Deoplice has a lovely API for creating complex modifications via its generated lenses -- this is what the DSL uses behind the scenes!
+Behind the scenes, Deoplice is built on top of an idea called Lenses. What exactly is a Lens? It doesn't matter! It's some gobbledygook from functional programming. They're basically getters and setters that compose really well. All you have to know is that this has two
+
+
+
+```set```
+
+```update```
+
 
 ```java
-
-
 updatedOrder=set($approval,$status,"COMPLETED")
         .andThen(set($approval,$confirmation,$updatedOn,LocalDateTime.now()))
         .andThen(update($approval,$comments,xs->xs.append(someFinalComment)))
