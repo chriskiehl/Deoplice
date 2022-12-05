@@ -9,6 +9,7 @@ import io.vavr.collection.Map;
 import lombok.Builder;
 import lombok.Value;
 
+import javax.lang.model.element.Element;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.function.Function;
@@ -35,7 +36,7 @@ public class Parser {
     }
 
     @Value
-    @Builder
+    @Builder(toBuilder = true)
     static class Result {
         Map<String, Array<LensDescriptor.Lens>> lenses;
         Array<Types.DSL> setters;

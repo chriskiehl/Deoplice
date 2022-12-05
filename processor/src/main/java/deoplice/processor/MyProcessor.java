@@ -1,6 +1,9 @@
 package deoplice.processor;
 
+import deoplice.processor.codegen.ClassGenerator;
 import deoplice.processor.codegen.Parser;
+import deoplice.processor.types.POJOField;
+import deoplice.processor.types.Registry;
 import io.vavr.collection.Array;
 
 import javax.annotation.processing.AbstractProcessor;
@@ -8,6 +11,8 @@ import javax.annotation.processing.RoundEnvironment;
 import javax.annotation.processing.SupportedAnnotationTypes;
 import javax.lang.model.element.*;
 import javax.tools.Diagnostic;
+import javax.tools.JavaFileObject;
+import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -21,54 +26,32 @@ public class MyProcessor extends AbstractProcessor {
 //        throw new RuntimeException("PLEASE");
 //    }
 
-    Array<Parser.FieldLineage> fields;
+    Array<POJOField> fields;
+    Registry registry;
 
 
+    /**
+     * TODO: Class vs method annotation
+     * TODO: Exlclusions
+     */
     @Override
     public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv) {
         processingEnv.getMessager().printMessage(Diagnostic.Kind.NOTE, "Hay.");
 
         Set<? extends Element> annotatedHandlers = roundEnv.getElementsAnnotatedWith(Lensed.class);
 
-        /*
-        GETTING ROOT FIELDS
-        -------------------
-
-        ((TypeElement)annotatedHandlers.iterator().next()).getEnclosedElements().stream()
-        .filter(x -> x.getKind() == ElementKind.FIELD)
-        .toList()
-
-        RECURSING INTO SUB-OBJECTS
-        --------------------------
-        processingEnv.getTypeUtils().asElement(((TypeElement) annotatedHandlers.iterator().next())
-            .getEnclosedElements()
-            .get(2)
-            .asType()).getEnclosedElements()
-
-       GETTING TYPE SIGNATURE (IS NOT EASY) (PARTIAL SOLUTION)
-       -------------------------------------------------------
-
-       ((TypeElement)((DeclaredType) ee.asType()).asElement()).getQualifiedName()
-       What's happening here:
-       Element(FIELD) -> Type -> Element(CLASS) -> ElementType -> getQualifiedName()
-
-       When you're iterating the fields off the class, you find them as Elements of kind FIELD.
-       Fields cannot be made into TypeElement directly, because this element is a FIELD. To get its
-       type signature (at least for non-parameterized types), you've got to from FIELD to TYPE, but
-       TypeMirrors can capture things like `NoType` or `NullType` which don't have class info, and so,
-       after verifying that the Type is DECLARED (e.g. a Class or Interface), we can finally go back to
-       Element, cast it to TypeElement, and get the qualified path!
-
-       Holy Crackers!
-
-
-         */
-
-//        processingEnv.getTypeUtils().asElement()
-
         for (Element e : annotatedHandlers) {
             int a =10;
-            fields = Parser.parseFields(processingEnv.getTypeUtils()::asElement, e);
+            processingEnv.getElementUtils().getAllAnnotationMirrors(e);
+            fields = Parser.parseFields(processingEnv.getElementUtils(), e);
+            registry = Parser.parse(e);
+            String result = ClassGenerator.generateClass(registry);
+            processingEnv.getMessager().printMessage(Diagnostic.Kind.NOTE, result);
+            try {
+                processingEnv.getFiler().createSourceFile(result);
+            } catch (IOException ioException) {
+                ioException.printStackTrace();
+            }
             for (Element ee : e.getEnclosedElements()) {
                 int b = 1;
             }

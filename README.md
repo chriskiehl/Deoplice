@@ -3,6 +3,12 @@
 
 "to a great depth"
 
+Deoplice is a library focused on making updates to deeply nested immutable objects pleasant. It's intended to be symbiotic with Lombok. It pick up where `With` and `@Builder` leave off. 
+
+
+
+Deoplice picks up where Lombok's `With` and `Builder` leave off: dealing with updates to deeply nested immutable POJOs. 
+
 An auto-generated, highly composable API for performing deeply nested updates on immutable POJOs. 
 
 A practical Java lens library for performing deeply nested updates on immutable POJOs.
@@ -51,7 +57,7 @@ updatedOrder = setConfirmationUpdateOn(LocalDateTime.now())
 
  
 
-It picks up where Lombok's `with` leaves off. 
+It picks up where Lombok's `with` and `Builder` leaves off. 
 
 ### What's it look like? 
 
@@ -135,6 +141,5 @@ And just like the DSL itself, these are just plain functions. So they play well 
 ```java 
 completedOrders = pendingOrders.stream().map(set($approval, $status, "COMPLETED")).toList(); 
 ```
-
 
 

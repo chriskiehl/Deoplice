@@ -61,12 +61,7 @@ public class Repl {
         JavaCompiler.CompilationTask result = compiler.getTask(null, null, null, null, null, ImmutableList.of(
                 new CharSequenceJavaFileObject(
                         "org.joor.test.FailAnnotationProcessing",
-                        """
-                                 package org.joor.test; 
-                                 @A
-                                 public class FailAnnotationProcessing {
-                                 }
-                                """
+                        ""
                 )
         ));
 
