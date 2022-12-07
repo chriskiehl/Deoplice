@@ -10,6 +10,13 @@ import java.util.function.Function;
 public class Explore {
 
     @Test
+    public void adfads2fff() {
+        FieldTypes<Object> ft = FieldTypes.builder()
+                .build();
+    }
+
+
+    @Test
     public void adfadsf() {
         Root x = new Root(new Foo("Bob"));
         System.out.println($root$bar.set(x, "FOFOFOFOF"));

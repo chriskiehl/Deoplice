@@ -5,6 +5,8 @@ import deoplice.processor.codegen.Parser;
 import deoplice.processor.types.POJOField;
 import deoplice.processor.types.Registry;
 import io.vavr.collection.Array;
+import io.vavr.collection.HashMap;
+import io.vavr.collection.HashSet;
 
 import javax.annotation.processing.AbstractProcessor;
 import javax.annotation.processing.RoundEnvironment;
@@ -13,8 +15,7 @@ import javax.lang.model.element.*;
 import javax.tools.Diagnostic;
 import javax.tools.JavaFileObject;
 import java.io.IOException;
-import java.util.HashSet;
-import java.util.Set;
+import java.io.PrintWriter;
 
 @SupportedAnnotationTypes("deoplice.processor.Lensed")
 public class MyProcessor extends AbstractProcessor {
@@ -27,7 +28,7 @@ public class MyProcessor extends AbstractProcessor {
 //    }
 
     Array<POJOField> fields;
-    Registry registry;
+    Registry registry = Registry.builder().lenses(HashMap.empty()).apis(HashMap.empty()).build();
 
 
     /**
@@ -35,54 +36,43 @@ public class MyProcessor extends AbstractProcessor {
      * TODO: Exlclusions
      */
     @Override
-    public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv) {
+    public boolean process(java.util.Set<? extends TypeElement> annotations, RoundEnvironment roundEnv) {
         processingEnv.getMessager().printMessage(Diagnostic.Kind.NOTE, "Hay.");
 
-        Set<? extends Element> annotatedHandlers = roundEnv.getElementsAnnotatedWith(Lensed.class);
-
-        for (Element e : annotatedHandlers) {
-            int a =10;
-            processingEnv.getElementUtils().getAllAnnotationMirrors(e);
-            fields = Parser.parseFields(processingEnv.getElementUtils(), e);
-            registry = Parser.parse(e);
-            String result = ClassGenerator.generateClass(registry);
-            processingEnv.getMessager().printMessage(Diagnostic.Kind.NOTE, result);
-            try {
-                processingEnv.getFiler().createSourceFile(result);
-            } catch (IOException ioException) {
-                ioException.printStackTrace();
+        HashSet<? extends Element> annotatedHandlers = HashSet.ofAll(roundEnv.getElementsAnnotatedWith(Lensed.class));
+        // TODO: test that multiple @Lensed annotations
+        Registry lensRegistry = annotatedHandlers.foldLeft(Registry.empty(), (registry, element) -> registry.merge(Parser.parse(element)));
+        String classSource = ClassGenerator.generateClass(lensRegistry);
+        try {
+            JavaFileObject file = processingEnv.getFiler().createSourceFile("deoplice.processor.GeneratedAPIs");
+            try (PrintWriter out = new PrintWriter(file.openWriter())) {
+                out.write(classSource);
             }
-            for (Element ee : e.getEnclosedElements()) {
-                int b = 1;
-            }
+        } catch (IOException ioException) {
+            ioException.printStackTrace();
         }
+
+//        for (Element e : annotatedHandlers) {
+//            int a = 10;
+//            processingEnv.getElementUtils().getAllAnnotationMirrors(e);
+//            fields = Parser.parseFields(processingEnv.getElementUtils(), e);
+//            registry = registry.merge(Parser.parse(e));
 //
-//        annotatedHandlers.forEach(x -> {
-//            Arrays.stream(x.getClass().getDeclaredFields()).forEach(q -> {
-//                System.out.println(q);
-//                processingEnv.getMessager().printMessage(Diagnostic.Kind.MANDATORY_WARNING, q.toString());
-//            });
-//            processingEnv.getMessager().printMessage(Diagnostic.Kind.NOTE, x.toString());
-//        });
-
-
-
-//        try {
-//            JavaFileObject file = processingEnv.getFiler().createSourceFile("MyFirstClass");
-//            Writer writer = file.openWriter();
-//            writer.write("public class MyFirstClass {}");
-//            writer.close();
-//        } catch (Exception ex) {
-//            ex.printStackTrace();
+//
+////            String result = ClassGenerator.generateClass(registry);
+////            processingEnv.getMessager().printMessage(Diagnostic.Kind.NOTE, result);
+//
+////            for (Element ee : e.getEnclosedElements()) {
+////                int b = 1;
+////            }
 //        }
 
-//        throw new RuntimeException("FIUDHID");
         return true;
     }
 
     @Override
-    public Set<String> getSupportedAnnotationTypes() {
-        HashSet<String> s = new HashSet<>();
+    public java.util.Set<String> getSupportedAnnotationTypes() {
+        java.util.HashSet<String> s = new java.util.HashSet<>();
         s.add("deoplice.processor.Lensed");
         return s;
     }

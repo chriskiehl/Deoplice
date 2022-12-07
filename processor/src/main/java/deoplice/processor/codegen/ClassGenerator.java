@@ -15,7 +15,7 @@ import static java.lang.String.format;
 public class ClassGenerator {
 
     public static String generateClass(Registry registry) {
-        return format("deoplice.processor\n\n" +
+        return format("package deoplice.api;\n\n" +
                         "import deoplice.lenses.Lens;\n" +
                         "import java.util.function.Function;\n" +
                         "import static deoplice.lenses.API.makeLens;\n\n" +
