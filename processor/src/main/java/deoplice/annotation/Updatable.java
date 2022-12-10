@@ -1,7 +1,6 @@
 package deoplice.processor;
 
 import deoplice.processor.codegen.WithStrategy;
-import lombok.experimental.ExtensionMethod;
 
 import javax.lang.model.element.Element;
 import java.lang.annotation.ElementType;
@@ -12,7 +11,7 @@ import java.util.function.Function;
 
 @Retention(RetentionPolicy.SOURCE)
 @Target(ElementType.TYPE)
-public @interface Lensed {
+public @interface Updatable {
     String[] exclude() default {};
 
     // Fundamental limits on how much we can pass to the

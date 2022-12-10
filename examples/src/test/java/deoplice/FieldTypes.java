@@ -1,15 +1,12 @@
-package deoplice.processor;
+package deoplice;
 
-import deoplice.processor.codegen.WithStrategy;
-import io.vavr.Tuple2;
-import io.vavr.Tuple3;
+import deoplice.annotation.Updatable;
 import io.vavr.collection.Array;
 import lombok.Builder;
 import lombok.Value;
 import lombok.With;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 /**
  * A POJO that declares fields of every possible type available to the
@@ -33,8 +30,10 @@ import java.util.List;
 @With
 @Value
 @Builder
-@Lensed(exclude = {"integers"})
+@Updatable(exclude = {"integers"})
 public class FieldTypes<A> {
+    // TODO: these need to be 'autoboxed' to their object equivalent
+    //       otherwise the Lens signature breaks :|
 //    // PrimitiveTypes
 //    byte bytes;
 //    short shorts;
@@ -88,7 +87,7 @@ public class FieldTypes<A> {
 
     @With
     @Value
-    @Lensed
+//    @Lensed
     public static class ArbitraryUserClass2 {
         Array<String> array;
         LocalDateTime datetime;

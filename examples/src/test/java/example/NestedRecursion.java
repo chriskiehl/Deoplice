@@ -1,4 +1,4 @@
-package deoplice.processor;
+package example;
 
 import lombok.Value;
 import lombok.With;
@@ -21,7 +21,6 @@ import lombok.With;
  */
 @With
 @Value
-@Lensed
 public class NestedRecursion {
     int foo = 123;
     int bar = 234;

@@ -14,7 +14,7 @@ plugins {
 }
 
 group = "deoplice"
-version = "0.1"
+version = "0.0.1"
 
 
 repositories {
@@ -44,6 +44,38 @@ dependencies {
     implementation(project(":processor"))
     annotationProcessor(project(":processor"))
     testAnnotationProcessor(project(":processor"))
+}
+
+
+sourceSets {
+    main {
+        java {
+            srcDir("C:\\Users\\Chris\\Documents\\deoplice\\lib\\build\\generated\\sources\\annotationProcessor\\java\\main")
+
+        }
+    }
+}
+//////    test {
+//////        java {
+//////            srcDir("C:\\Users\\Chris\\Documents\\deoplice\\lib\\build\\generated\\sources\\annotationProcessor\\java")
+//////        }
+//////    }
+////    test {
+////        java {
+////            srcDir("C:\\Users\\Chris\\Documents\\deoplice\\lib\\build\\generated\\sources\\annotationProcessor")
+////        }
+////    }
+//}
+
+tasks.compileJava {
+    println("Compile java!")
+    println(sourceSets.toString())
+    println(options.generatedSourceOutputDirectory.asFile.get())
+}
+
+tasks.compileTestJava {
+    println(sourceSets.toString())
+    println("Howdy")
 }
 
 tasks.named<Test>("test") {

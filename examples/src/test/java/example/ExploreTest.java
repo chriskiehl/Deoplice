@@ -1,5 +1,7 @@
-package deoplice.processor;
+package example;
 
+import deoplice.FieldTypes;
+import deoplice.annotation.Updatable;
 import lombok.Value;
 import lombok.With;
 import org.junit.jupiter.api.Test;
@@ -7,12 +9,42 @@ import org.junit.jupiter.api.Test;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
-public class Explore {
+
+public class ExploreTest {
+
+    @Value
+    @With
+    @Updatable
+    public static class MyModel {
+        String stringie;
+    }
+
 
     @Test
     public void adfads2fff() {
-        FieldTypes<Object> ft = FieldTypes.builder()
-                .build();
+        FieldTypes<Object> ft = FieldTypes.builder().build();
+//        gen.deoplice.FieldTypesAPI.setIntegers(1);
+//        MyModel local = new MyModel("super");
+////        System.out.println(setStringie("duper").apply(local));
+//
+//        example.MyModel obj = new example.MyModel((byte) 1, "sup", LocalDateTime.now());
+//        System.out.println(setFoo("nword")
+//                .andThen(setBar(LocalDateTime.MIN))
+//                .andThen(setLittle((byte) 100))
+//                .apply(obj));
+
+//        Generated.FieldTypes.setIntegers(100);
+
+//        FieldTypes result = setIntegers(100)
+//                .andThen(setSomeArbitraryDeclaredClassString("foobie"))
+//                .apply(ft);
+//
+//        System.out.println(ft);
+//        System.out.println(result);
+
+//        FieldTypes<Object> updated = setSomeArbitraryDeclaredClass(new ArbitraryUserClass1((byte) 1, "one", null))
+//                .andThen(setIntegers(1234))
+//                .apply(ft);
     }
 
 
