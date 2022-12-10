@@ -4,7 +4,7 @@
 
 >to a great depth
 
------------
+## Overview
 
 Deoplice is a library for modifying deeply nested immutable POJOs. It's symbiotic with Lombok and picks up where `With` and `@Builder` leave off: it gives you a high level, auto-generated modification API that cuts through the boilerplate and let's you express changes exctly as intended. 
 
