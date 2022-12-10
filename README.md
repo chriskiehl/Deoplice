@@ -1,4 +1,6 @@
-![Deploice logo](https://github.com/chriskiehl/Deoplice/raw/master/images/deoplice-logo.JPG)
+<p align="center">
+    <img src="https://github.com/chriskiehl/Deoplice/raw/master/images/deoplice-logo.JPG"/>
+</p>
 
 
 >"to a great depth"
@@ -26,7 +28,7 @@ Like Lombok, Deoplice works off annotations. To generate an API for your classes
 ```java
 @With
 @Value
-@Updatable   // NEW! ← All it takes!  :) 
+@Updatable   // ← New Annotation! All it takes!  :) 
 class PurchaseOrder {
     String number; 
     Approval approval; 
