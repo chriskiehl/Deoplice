@@ -5,18 +5,15 @@
 
 >"to a great depth"
 
-## Table of Contents: 
+Deoplice is a library for modifying deeply nested immutable POJOs. It's symbiotic with Lombok and picks up where `With` and `@Builder` leave off: it gives you a high level, auto-generated modification API that cuts through the boilerplate and let's you express changes exctly as intended. 
 
-* About 
+## Table of Contents:
+
+* About
 * How does it work
 * Lower level API
 * Understanding code generation
-* Customizing the generated API 
-
-
-## About 
-
-Deoplice is a library for modifying deeply nested immutable POJOs. It's symbiotic with Lombok and picks up where `With` and `@Builder` leave off: it gives you a high level, auto-generated modification API that cuts through the boilerplate and let's you express changes exctly as intended. 
+* Customizing the generated API
 
 
 >Note! Deoplice is currently in alpha and may have some bugs lurking around. Annotation processing is unexpectedly tricky and under-documented...
@@ -26,6 +23,8 @@ Deoplice is a library for modifying deeply nested immutable POJOs. It's symbioti
 Like Lombok, Deoplice works off annotations. To generate an API for your classes, all you've got to do is add the `@Updatable` annotation to any class that's already annotated with Lombok's `@With`.  
 
 ```java
+import deoplice.annotation.Updatable;
+
 @With
 @Value
 @Updatable   // ← New Annotation! All it takes!  :) 
