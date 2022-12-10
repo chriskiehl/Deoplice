@@ -1,4 +1,4 @@
-![Deploice logo](https://github.com/chriskiehl/Deoplice/raw/master/images/logo-cropped.jpg)
+![Deploice logo](https://github.com/chriskiehl/Deoplice/raw/master/images/deoplice-logo.JPG)
 
 
 >"to a great depth"
@@ -125,7 +125,7 @@ import deoplice.generated.foo.bar.FooAPI;
 
 Alternatively, you can ignore all that and just let your IDE figure out (it's very good at this!) 
 
-![autocomlpete](C:\Users\Chris\Documents\deoplice\images\autocomplete.gif)
+![Using auto-complete](https://github.com/chriskiehl/Deoplice/raw/master/images/autocomplete.gif)
 
 
 
