@@ -1,10 +1,13 @@
 package deoplice.processor.types;
 
+import deoplice.annotation.Updatable;
+import lombok.Builder;
 import lombok.Value;
+import lombok.experimental.Delegate;
+
 
 @Value
+@Builder
 public class Config {
-    String lensPrefix = "$";
-    String apiPrefix = "set";
-    String groupPostfix = "Lens";
+    @Delegate Updatable annotation;
 }
