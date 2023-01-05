@@ -20,7 +20,7 @@ import static java.util.function.Function.identity;
 @Value
 public class Generator {
     Updatable config;
-    Array<MethodCreator> methodGenerationStrats;
+    Array<MethodGenerator> methodGenerationStrats;
 
     public Array<AST.ClassDef> lensClasses2(Array<ExtractedField> fields) {
         return lensClasses(this.config, fields);
@@ -69,12 +69,12 @@ public class Generator {
 
 
     public static AST.LensAssignment createLensAssignment(Updatable conf, ExtractedField field) {
-        val name = conf.lensVariablePrefix() + simpleName(field.getElement());
+        val name = conf.lensVariablePrefix() + unqualifiedName(field.getElement());
         return AST.LensAssignment.builder()
                 .declaringClass(AST.Qualified.of(lensifyDeclaringClass(field.getElement(), conf.lensClassSuffix())))
                 .name(name)
                 .assignment("public static Lens<CLASS_TYPE, FIELD_TYPE> NAME = makeLens(GETTER, SETTER);"
-                        .replace("CLASS_TYPE", declaringClass(field.getElement()))
+                        .replace("CLASS_TYPE", declaringType(field.getElement()))
                         .replace("FIELD_TYPE", GrabBag.typeOf(field.getElement()))
                         .replace("NAME", name)
                         .replace("GETTER", field.getGetter())
@@ -97,12 +97,14 @@ public class Generator {
         return params.map(x -> x.getType().getValue() + " " + x.getName()).mkString(", ");
     }
 
-    public static AST.ClassDef apiClass(Updatable conf, Array<MethodCreator> providers, Array<ExtractedField> fields) {
+    public static AST.ClassDef apiClass(Updatable conf, Array<MethodGenerator> providers, Array<ExtractedField> fields) {
         AST.Qualified rootClass = rootClass(fields.head());
+        String rootType = generifiedType(rootElement(fields.head()));
         java.util.List<AST> methods = new java.util.ArrayList<>();
         for (ExtractedField field : fields) {
-            for (MethodCreator provider : providers) {
+            for (MethodGenerator provider : providers) {
                 for (AST.ApiMethodDef thing : provider.generateMethods(field.getElement())) {
+
                     methods.add(AST.MethodDef.builder()
                             .name(thing.getAction() + nestedVariableName("", field))
                             .declaringClass(rootClass)
@@ -110,7 +112,7 @@ public class Generator {
                                     "\tLens<ROOT_TYPE, FIELD_TYPE> lens = LENS;\n" +
                                     "\treturn (ROOT_TYPE obj) -> deoplice.lenses.API.update(lens, EXPR).apply(obj);\n" +
                                     "}\n")
-                                    .replace("ROOT_TYPE", rootClass.getValue())
+                                    .replace("ROOT_TYPE", rootType)
                                     .replace("LENS", compo(createLensReference(conf, field)))
                                     .replace("FIELD_TYPE", typeOf(field.getElement()))
                                     .replace("METHOD_NAME", nestedVariableName("", field))

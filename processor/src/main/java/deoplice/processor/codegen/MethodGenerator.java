@@ -6,6 +6,6 @@ import io.vavr.collection.Array;
 import javax.lang.model.element.Element;
 
 @FunctionalInterface
-public interface MethodCreator {
+public interface MethodGenerator {
     Array<AST.ApiMethodDef> generateMethods(Element element);
 }

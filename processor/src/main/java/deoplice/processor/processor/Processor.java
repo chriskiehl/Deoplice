@@ -6,6 +6,8 @@ import deoplice.processor.types.AST;
 import io.vavr.collection.Array;
 import io.vavr.collection.HashSet;
 import io.vavr.collection.Set;
+import lombok.Getter;
+import lombok.Value;
 
 import javax.annotation.processing.AbstractProcessor;
 import javax.annotation.processing.RoundEnvironment;
@@ -16,28 +18,27 @@ import javax.tools.Diagnostic;
 import javax.tools.FileObject;
 import java.io.Writer;
 
+@Getter
 @SupportedAnnotationTypes("deoplice.annotation.Updatable")
 public class Processor extends AbstractProcessor {
+    private Set<AST.ClassDef> classDefs;
 
-
-    /**
-     *
-     */
     @Override
     public boolean process(java.util.Set<? extends TypeElement> annotations, RoundEnvironment roundEnv) {
-        HashSet<? extends Element> elements = HashSet.ofAll(roundEnv.getElementsAnnotatedWith(Updatable.class));
+        HashSet<Element> elements = HashSet.ofAll(roundEnv.getElementsAnnotatedWith(Updatable.class));
         if (elements.isEmpty() && roundEnv.processingOver()) {
             return true;
         }
         try {
             Set<AST.ClassDef> classDefs = HashSet.ofAll(elements).flatMap(element -> {
-                processingEnv.getElementUtils().getPackageOf(element);
-                // .get() safe; guaranteed by the check above
-                Updatable config = GrabBag.findAnnotation(element, Updatable.class).get();
+                Updatable config = GrabBag.findAnnotation(element, Updatable.class).get();  // safe due to above check
                 Controller controller = new FactoryFactoryFactoryFactoryFactory().controller(config, processingEnv.getFiler());
-                return controller.generateSourceFiles(element);
+                return controller.generateSourceClasses(element);
             }).toSet();
 
+            // These get stuffed onto the instance just to enable
+            // checking the in memory representations during testing
+            this.classDefs = classDefs;
 
             for (AST.ClassDef classDef : classDefs) {
                 String pkg = classDef.getPkg();

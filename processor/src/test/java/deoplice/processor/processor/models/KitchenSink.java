@@ -1,7 +1,7 @@
-package deoplice.processor;
+package deoplice.processor.processor.models;
 
 import deoplice.annotation.Updatable;
-import deoplice.processor.NestedUpdatable.InnerAnnotatedClass;
+import deoplice.processor.processor.models.nested.pkg.AnotherClassFile;
 import io.vavr.Tuple2;
 import io.vavr.Tuple3;
 import io.vavr.collection.Array;
@@ -14,9 +14,9 @@ import java.util.List;
 @With
 @Value
 @Updatable
-public class MyFoo<A> {
+public class KitchenSink {
     // PrimitiveTypes
-    byte bytes;
+//    byte bytes;
 //    short shorts;
 //    int ints;
 //    long longs;
@@ -26,7 +26,7 @@ public class MyFoo<A> {
 //    boolean booleans;
 //
 //    // ArrayTypes
-    int[] primitiveArray1;
+//    int[] primitiveArray1;
 //    int[][] primitiveArray2;
 //    int[][][] primitiveArray3;
 //    Integer[] objectArray1;
@@ -49,11 +49,9 @@ public class MyFoo<A> {
 //    List<? extends Number> boundedWildcard;
 //    List<String> concreteGeneric;
 //
-//    // TypeVar
-//    A typeVar;
 //
 //    // complex chaos
-//    Tuple3<A, String, Tuple2<List<A>, Integer>> complexDeclaredType;
+//    Tuple3<String, String, Tuple2<List<?>, Integer>> complexDeclaredType;
 
 
     @With
@@ -69,7 +67,7 @@ public class MyFoo<A> {
         public static class NestedNestedInnerClass {
             String whatever;
             AnotherClassFile anotherClassFile;
-            InnerAnnotatedClass innerAnnotatedClass;
+            NestedUpdatable.InnerAnnotatedClass innerAnnotatedClass;
         }
     }
 

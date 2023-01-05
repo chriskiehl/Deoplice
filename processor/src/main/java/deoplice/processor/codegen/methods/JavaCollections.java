@@ -1,11 +1,12 @@
 package deoplice.processor.codegen.methods;
 
 import deoplice.processor.codegen.GrabBag;
+import deoplice.processor.codegen.MethodGenerator;
 import deoplice.processor.types.AST;
-import deoplice.processor.codegen.MethodCreator;
 import io.vavr.collection.Array;
 import io.vavr.collection.HashMap;
 import io.vavr.collection.Map;
+import io.vavr.control.Option;
 
 import javax.lang.model.element.Element;
 import java.util.function.Function;
@@ -26,76 +27,104 @@ import static java.lang.String.format;
  *
  * TODO: call this out in the README.
  */
-public class JavaCollections implements MethodCreator {
+public class JavaCollections implements MethodGenerator {
 
     @Override
     public Array<AST.ApiMethodDef> generateMethods(Element element) {
-        return supported.getOrElse(rawTypeOf(element), Array.empty()).map(f -> f.apply(element));
+        return supported.getOrElse(nonParameterizedType(element), Array.empty()).map(f -> f.apply(element))
+                .filter(Option::isDefined)
+                .map(Option::get);
     }
 
-
-    static Map<String, Array<Function<Element, AST.ApiMethodDef>>> supported = HashMap.of(
+    static Map<String, Array<Function<Element, Option<AST.ApiMethodDef>>>> supported = HashMap.of(
             "java.util.LinkedList", Array.of(
-                    delegate("add", GrabBag::genericTypeOf, GrabBag::typeOf),
+                    delegate("add", GrabBag::firstTypeParameter, GrabBag::typeOf),
                     delegate("addAll", GrabBag::typeOf, GrabBag::typeOf),
-                    delegate("remove", GrabBag::genericTypeOf, GrabBag::typeOf),
+                    delegateStream("map", e -> fn(GrabBag.firstTypeParameter(e)), GrabBag::typeOf),
+                    delegateStream("filter", e -> predicate(GrabBag.firstTypeParameter(e)), GrabBag::typeOf),
+                    delegate("remove", GrabBag::firstTypeParameter, GrabBag::typeOf),
                     delegate("removeAll", GrabBag::typeOf, GrabBag::typeOf),
-                    delegate("sort", e -> format("java.util.Comparator<%s>", genericTypeOf(e)), GrabBag::typeOf)
+                    delegate("sort", e -> format("java.util.Comparator<%s>", firstTypeParameter(e)), GrabBag::typeOf)
             ),
             "java.util.ArrayList", Array.of(
-                    delegate("add", GrabBag::genericTypeOf, GrabBag::typeOf),
+                    delegate("add", GrabBag::firstTypeParameter, GrabBag::typeOf),
                     delegate("addAll", GrabBag::typeOf, GrabBag::typeOf),
-                    delegate("remove", GrabBag::genericTypeOf, GrabBag::typeOf),
+                    delegateStream("map", e -> fn(GrabBag.firstTypeParameter(e)), JavaCollections::arraylist),
+                    delegateStream("filter", e -> predicate(GrabBag.firstTypeParameter(e)), JavaCollections::arraylist),
+                    delegate("remove", GrabBag::firstTypeParameter, GrabBag::typeOf),
                     delegate("removeAll", GrabBag::typeOf, GrabBag::typeOf),
-                    delegate("sort", e -> format("java.util.Comparator<%s>", genericTypeOf(e)), GrabBag::typeOf)
+                    delegate("sort", e -> format("java.util.Comparator<%s>", firstTypeParameter(e)), GrabBag::typeOf)
             ),
             "java.util.List", Array.of(
-                    delegate("add", GrabBag::genericTypeOf, e -> format("java.util.ArrayList<%s>", genericTypeOf(e))),
-                    delegate("addAll", GrabBag::typeOf, e -> format("java.util.ArrayList<%s>", genericTypeOf(e))),
-                    delegateStream("map", e -> fn(GrabBag.genericTypeOf(e)), e -> format("java.util.ArrayList<%s>", genericTypeOf(e))),
-                    delegateStream("filter", e -> predicate(GrabBag.genericTypeOf(e)), e -> format("java.util.ArrayList<%s>", genericTypeOf(e))),
-                    delegate("remove", GrabBag::genericTypeOf, e -> format("java.util.ArrayList<%s>", genericTypeOf(e))),
-                    delegate("removeAll", GrabBag::typeOf, e -> format("java.util.ArrayList<%s>", genericTypeOf(e))),
-                    delegate("sort", e -> format("java.util.Comparator<%s>", genericTypeOf(e)), e -> format("java.util.ArrayList<%s>", genericTypeOf(e)))
+                    delegate("add", GrabBag::firstTypeParameter, JavaCollections::arraylist),
+                    delegate("addAll", GrabBag::typeOf, JavaCollections::arraylist),
+                    delegateStream("map", e -> fn(GrabBag.firstTypeParameter(e)), JavaCollections::arraylist),
+                    delegateStream("filter", e -> predicate(GrabBag.firstTypeParameter(e)), JavaCollections::arraylist),
+                    delegate("remove", GrabBag::firstTypeParameter, JavaCollections::arraylist),
+                    delegate("removeAll", GrabBag::typeOf, JavaCollections::arraylist),
+                    delegate("sort", e -> format("java.util.Comparator<%s>", firstTypeParameter(e)), JavaCollections::arraylist)
             ),
             "java.util.HashSet", Array.of(
-                    delegate("add", GrabBag::genericTypeOf, GrabBag::typeOf),
+                    delegate("add", GrabBag::firstTypeParameter, GrabBag::typeOf),
                     delegate("addAll", GrabBag::typeOf, GrabBag::typeOf),
-                    delegate("remove", GrabBag::genericTypeOf, GrabBag::typeOf),
+                    delegateStream("map", e -> fn(GrabBag.firstTypeParameter(e)), JavaCollections::hashset),
+                    delegateStream("filter", e -> predicate(GrabBag.firstTypeParameter(e)), JavaCollections::hashset),
+                    delegate("remove", GrabBag::firstTypeParameter, GrabBag::typeOf),
                     delegate("removeAll", GrabBag::typeOf, GrabBag::typeOf)
             ),
             "java.util.Set", Array.of(
-                    delegate("add", GrabBag::genericTypeOf, e -> format("java.util.HashSet<%s>", genericTypeOf(e))),
-                    delegate("addAll", GrabBag::typeOf, GrabBag::typeOf),
-                    delegate("remove", GrabBag::genericTypeOf, GrabBag::typeOf),
-                    delegate("removeAll", GrabBag::typeOf, GrabBag::typeOf)
+                    delegate("add", GrabBag::firstTypeParameter,JavaCollections::hashset),
+                    delegate("addAll", GrabBag::typeOf, JavaCollections::hashset),
+                    delegateStream("map", e -> fn(GrabBag.firstTypeParameter(e)), JavaCollections::hashset),
+                    delegateStream("filter", e -> predicate(GrabBag.firstTypeParameter(e)), JavaCollections::hashset),
+                    delegate("remove", GrabBag::firstTypeParameter, JavaCollections::hashset),
+                    delegate("removeAll", GrabBag::typeOf, JavaCollections::hashset)
             )
     );
 
-
-    public static Function<Element, AST.ApiMethodDef> delegate(String name, Function<Element, String> paramType, Function<Element, String> concreteDelegateType) {
-        return (Element e) -> AST.ApiMethodDef.builder()
-                .action(name)
-                .params(standardParam(paramType.apply(e)))
-                .expression(("(x) -> {\n" +
-                        "DELEGATE_TYPE copy = x.stream().collect(java.util.stream.Collectors.toCollection(COL_TYPE::new));\n" +
-                        "copy.METHOD_NAME(param1);\n" +
-                        "return copy;\n" +
-                        "}")
-                        .replace("DELEGATE_TYPE", concreteDelegateType.apply(e))
-                        .replace("METHOD_NAME", name)
-                        .replace("COL_TYPE", concreteDelegateType.apply(e)))
-                .build();
+    static String arraylist(Element e) {
+        return format("java.util.ArrayList<%s>", firstTypeParameter(e));
     }
 
-    public static Function<Element, AST.ApiMethodDef> delegateStream(String name, Function<Element, String> paramType, Function<Element, String> concreteDelegateType) {
-        return (Element e) -> AST.ApiMethodDef.builder()
-                .action(name)
-                .params(standardParam(paramType.apply(e)))
-                .expression("(x) -> x.stream().METHOD_NAME(param1).collect(java.util.stream.Collectors.toCollection(COL_TYPE::new))"
-                        .replace("METHOD_NAME", name)
-                        .replace("COL_TYPE", concreteDelegateType.apply(e)))
-                .build();
+    static String hashset(Element e) {
+        return format("java.util.HashSet<%s>", firstTypeParameter(e));
+    }
+
+    public static Function<Element, Option<AST.ApiMethodDef>> delegate(String name, Function<Element, String> paramType, Function<Element, String> concreteDelegateType) {
+        return (Element e) -> {
+            if (GrabBag.hasNoTypeVarsOrWildcards(e)) {
+                return Option.some(AST.ApiMethodDef.builder()
+                        .action(name)
+                        .params(standardParam(paramType.apply(e)))
+                        .expression(("(x) -> {\n" +
+                                "DELEGATE_TYPE copy = x.stream().collect(java.util.stream.Collectors.toCollection(COL_TYPE::new));\n" +
+                                "copy.METHOD_NAME(param1);\n" +
+                                "return copy;\n" +
+                                "}")
+                                .replace("DELEGATE_TYPE", concreteDelegateType.apply(e))
+                                .replace("METHOD_NAME", name)
+                                .replace("COL_TYPE", concreteDelegateType.apply(e)))
+                        .build());
+            } else {
+                return Option.none();
+            }
+        };
+    }
+
+    public static Function<Element, Option<AST.ApiMethodDef>> delegateStream(String name, Function<Element, String> paramType, Function<Element, String> concreteDelegateType) {
+        return (Element e) -> {
+            if (GrabBag.hasNoTypeVarsOrWildcards(e)) {
+                return Option.some(AST.ApiMethodDef.builder()
+                        .action(name)
+                        .params(standardParam(paramType.apply(e)))
+                        .expression("(x) -> x.stream().METHOD_NAME(param1).collect(java.util.stream.Collectors.toCollection(COL_TYPE::new))"
+                                .replace("METHOD_NAME", name)
+                                .replace("COL_TYPE", concreteDelegateType.apply(e)))
+                        .build());
+            } else {
+                return Option.none();
+            }
+        };
     }
 
 }

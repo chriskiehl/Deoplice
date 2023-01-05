@@ -1,4 +1,4 @@
-package deoplice.processor;
+package deoplice.processor.processor.models.nested.pkg;
 
 import lombok.Value;
 import lombok.With;

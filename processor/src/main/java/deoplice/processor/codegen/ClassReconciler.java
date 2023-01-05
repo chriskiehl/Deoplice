@@ -94,7 +94,7 @@ public class ClassReconciler {
      */
     public void insert(LensBundle lensBundle) {
         Node curr = root;
-        val classNames= GrabBag.splitDeclaringClasses2(lensBundle.getDeclaringClass().getValue());
+        val classNames= GrabBag.splitDeclaringClasses2(lensBundle.getDeclaringClass());
         for (String s : classNames) {
             if (!curr.children.containsKey(s)) {
                 Node newNode = new Node(

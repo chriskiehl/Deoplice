@@ -11,7 +11,7 @@ import lombok.Value;
 import javax.lang.model.element.Element;
 import java.util.function.Function;
 
-import static deoplice.processor.codegen.GrabBag.enclosedElements;
+import static deoplice.processor.codegen.GrabBag.enclosedFields;
 
 /**
  * Recursively traverses the Element AST to extract all
@@ -28,7 +28,7 @@ public class Parser {
 
     private Array<ExtractedField> parseFields(Element element, int recursionDepth) {
         if (extractor.shouldExtract(element) && recursionDepth < config.maxRecursionDepth()) {
-            return enclosedElements(element).foldLeft(Array.empty(), (fields, field) -> {
+            return GrabBag.enclosedFields(element).foldLeft(Array.empty(), (fields, field) -> {
                 ExtractedField thisField = ExtractedField.builder()
                         .element(field)
                         .getter(extractor.getter(field))

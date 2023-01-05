@@ -3,7 +3,7 @@ package deoplice.processor.processor;
 import deoplice.annotation.Updatable;
 import deoplice.processor.codegen.Generator;
 import deoplice.processor.codegen.Controller;
-import deoplice.processor.codegen.MethodCreator;
+import deoplice.processor.codegen.MethodGenerator;
 import deoplice.processor.codegen.Parser;
 import deoplice.processor.codegen.methods.JavaCollections;
 import deoplice.processor.codegen.methods.Setter;
@@ -16,8 +16,8 @@ import lombok.val;
 import javax.annotation.processing.Filer;
 
 /**
- * We've gotta decide on a fair bit of config at runtime based on what
- * we find the user has specified on the annotation. So, object creation is
+ * We've gotta schlep around a fair bit of config at runtime based on what
+ * the user has specified on the annotation. So, object creation is
  * all bundled up here so that all the newing can take place in one spot.
  */
 public class FactoryFactoryFactoryFactoryFactory {
@@ -41,9 +41,8 @@ public class FactoryFactoryFactoryFactoryFactory {
         return new WithStrategy();
     }
 
-    Array<MethodCreator> provideMethodCreators(Updatable annotation) {
-        // TODO: service loader? Presumably, it'd be way too much a pain
-        //       in the ass for anyone to ever actually use.
+    Array<MethodGenerator> provideMethodCreators(Updatable annotation) {
+        // TODO: service loader? Although, I don't know why anyone would ever go through the pain
         return Array.of(
                 new Setter(annotation),
                 new Updater(annotation),

@@ -2,7 +2,7 @@ package deoplice.processor.codegen.methods;
 
 import deoplice.annotation.Updatable;
 import deoplice.processor.types.AST;
-import deoplice.processor.codegen.MethodCreator;
+import deoplice.processor.codegen.MethodGenerator;
 import io.vavr.collection.Array;
 import lombok.AllArgsConstructor;
 
@@ -15,7 +15,7 @@ import static deoplice.processor.codegen.GrabBag.typeOf;
  * Generates a standard Setter API method for (potentially deeply nested) fields.
  */
 @AllArgsConstructor
-public class Setter implements MethodCreator {
+public class Setter implements MethodGenerator {
     Updatable config;
 
     @Override

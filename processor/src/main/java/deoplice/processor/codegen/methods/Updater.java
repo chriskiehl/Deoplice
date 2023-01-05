@@ -3,7 +3,7 @@ package deoplice.processor.codegen.methods;
 import deoplice.annotation.Updatable;
 import deoplice.processor.codegen.GrabBag;
 import deoplice.processor.types.AST;
-import deoplice.processor.codegen.MethodCreator;
+import deoplice.processor.codegen.MethodGenerator;
 import io.vavr.collection.Array;
 import lombok.AllArgsConstructor;
 
@@ -15,7 +15,7 @@ import static deoplice.processor.codegen.GrabBag.fn;
  * Generates a functional Update API method for (potentially deeply nested) fields.
  */
 @AllArgsConstructor
-public class Updater implements MethodCreator {
+public class Updater implements MethodGenerator {
     Updatable config;
 
     @Override

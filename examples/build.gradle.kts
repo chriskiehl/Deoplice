@@ -50,33 +50,22 @@ dependencies {
 sourceSets {
     main {
         java {
-            srcDir("C:\\Users\\Chris\\Documents\\deoplice\\lib\\build\\generated\\sources\\annotationProcessor\\java\\main")
+            srcDir("C:\\Users\\Chris\\Documents\\deoplice\\examples\\build\\generated\\sources\\annotationProcessor\\java\\main")
 
         }
     }
 }
-//////    test {
-//////        java {
-//////            srcDir("C:\\Users\\Chris\\Documents\\deoplice\\lib\\build\\generated\\sources\\annotationProcessor\\java")
-//////        }
-//////    }
-////    test {
-////        java {
-////            srcDir("C:\\Users\\Chris\\Documents\\deoplice\\lib\\build\\generated\\sources\\annotationProcessor")
-////        }
-////    }
+
+//tasks.compileJava {
+//    println("Compile java!")
+//    println(sourceSets.toString())
+//    println(options.generatedSourceOutputDirectory.asFile.get())
 //}
-
-tasks.compileJava {
-    println("Compile java!")
-    println(sourceSets.toString())
-    println(options.generatedSourceOutputDirectory.asFile.get())
-}
-
-tasks.compileTestJava {
-    println(sourceSets.toString())
-    println("Howdy")
-}
+//
+//tasks.compileTestJava {
+//    println(sourceSets.toString())
+//    println("Howdy")
+//}
 
 tasks.named<Test>("test") {
     // Use JUnit Platform for unit tests.

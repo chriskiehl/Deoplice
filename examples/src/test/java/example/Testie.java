@@ -1,6 +1,6 @@
 package example;
 
-import deoplice.processor.MyProcessor;
+import deoplice.processor.processor.Processor;
 import org.junit.jupiter.api.Test;
 
 import javax.tools.JavaCompiler;
@@ -54,8 +54,8 @@ public class Testie {
                 ));
 
         JavaCompiler.CompilationTask result = compiler.getTask(null, null, null, optionList, null, list);
-        ArrayList<MyProcessor> ps = new ArrayList<MyProcessor>() {{
-            add(new MyProcessor());
+        ArrayList<Processor> ps = new ArrayList<Processor>() {{
+            add(new Processor());
         }};
         result.setProcessors(ps);
         System.out.println(result.call());

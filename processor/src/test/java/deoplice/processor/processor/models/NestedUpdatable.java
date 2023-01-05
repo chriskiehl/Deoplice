@@ -1,4 +1,4 @@
-package deoplice.processor;
+package deoplice.processor.processor.models;
 
 import deoplice.annotation.Updatable;
 import lombok.Value;

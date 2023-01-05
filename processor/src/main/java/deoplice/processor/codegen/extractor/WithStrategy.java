@@ -4,6 +4,7 @@ import deoplice.processor.codegen.GrabBag;
 import deoplice.processor.processor.Extractor;
 import io.vavr.Tuple;
 import io.vavr.collection.Array;
+import io.vavr.collection.HashSet;
 import io.vavr.control.Option;
 import io.vavr.control.Validation;
 import lombok.*;
@@ -51,11 +52,17 @@ public class WithStrategy implements Extractor {
 
     @Override
     public String getter(Element field) {
-        return String.format("%s::get%s", GrabBag.declaringClass(field), GrabBag.titleCase(GrabBag.simpleName(field)));
+        // TODO: if using the @Getter annotation directly rather than one of its
+        //       premixed flavors like @Data / @Value, `lombok.getter.noIsPrefix` needs to be
+        //       honored. See: https://projectlombok.org/features/GetterSetter
+        // We assume the default Lombok `is` boolean prefix for simplicity of initial release.
+        val booleanTypes = HashSet.of("java.lang.Boolean", "boolean");
+        String prefix = booleanTypes.contains(field.asType().toString()) ? "is" : "get";
+        return String.format("%s::%s%s", GrabBag.declaringClass(field), prefix, GrabBag.titleCase(GrabBag.unqualifiedName(field)));
     }
 
     @Override
     public String setter(Element field) {
-        return format("%s::with%s", GrabBag.declaringClass(field), GrabBag.titleCase(GrabBag.simpleName(field)));
+        return format("%s::with%s", GrabBag.declaringClass(field), GrabBag.titleCase(GrabBag.unqualifiedName(field)));
     }
 }
