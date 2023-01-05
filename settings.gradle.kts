@@ -8,5 +8,5 @@
  */
 
 rootProject.name = "Deoplice"
-include("lib")
+include("examples")
 include("processor")
