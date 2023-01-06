@@ -42,7 +42,7 @@ class Confirmation {
 }
 ```
 
-With the annotation in place, at build time, Deoplice will parse your class and recursively generate a full suite of immutable setters and update functions for every field it finds. It means you express complex data transformations like this: 
+With the annotation in place, at build time, Deoplice will parse your class and recursively generate a full suite of immutable setters and update functions for every field it finds. These generated API methods allow you to express complex data transformations like this: 
 
 ```java
 PurchaseOrder updatedOrder = setConfirmationUpdatedOn(LocalDateTime.now()) 
