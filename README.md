@@ -6,7 +6,7 @@
 
 ## Overview
 
-Deoplice is a library for modifying deeply nested immutable POJOs. It's **symbiotic** with [Lombok](https://projectlombok.org/)<sup>[0]</sup> and picks up where `@With` and `@Builder` leave off. It gives you a high level, auto-generated modification API that cuts through the boilerplate and let's you express changes exctly as intended.
+Deoplice is java library that automatically generates a fancy API for transforming your immutable POJOs. It's **symbiotic** with [Lombok](https://projectlombok.org/)<sup>[0]</sup> and picks up where `@With` and `@Builder` leave off. It gives you a high level, auto-generated modification API that cuts through the boilerplate and let's you express changes exctly as intended.
 
 ## Table of Contents:
 
