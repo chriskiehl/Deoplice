@@ -80,7 +80,7 @@ public class ClassReconciler {
      * The key to all of this is the bespoke tokenization method. This can take some (a lot) of thinking
      * as it breaks the usual Trie behavior / expectations.
      *
-     * The standard Trie generally operates on some Iterable<A>. This has really nice properties that
+     * The standard Trie generally operates on some `Iterable A`. This has really nice properties that
      * make it easy to reason about both how the tree is build and how to construct "words" during traversal.
      * For instance, in the case of strings, and collections, you get easy monoidal properties.
      *
