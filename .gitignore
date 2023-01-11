@@ -4,6 +4,9 @@ gradle
 gradlew
 gradlew.bat
 
+signingkey
+signingpass
+
 **/build/
 !src/**/build/
 
