@@ -1,12 +1,28 @@
 # Publishing to Maven 
 
-Much pain was encountered while trying to publish to Maven. 
+Pain in the bum. 
+
 
 ### Pre-publish testing
 
 1. Run the `publishMavenJavaPublicationToMavenLocal` task to write the jar to `~/.m2/repository`
-2. 
+2. In the DeopliceInstall repo, add a dep on the local `.m2/` repository 
+3. verify that the annotation processor runs as expected 
 
+
+### Releasing: 
+
+Follow the docs here: https://central.sonatype.org/publish/publish-gradle
+
+TL;DR: 
+
+1. Run the `publish` task 
+2. Go to `https://s01.oss.sonatype.org` and log in 
+3. Click `Staging Repositories` under `Build Promotion` 
+4. Select the package. Click `Close`
+5. Wait. If all goes well, it will pass the "requirements" and be ready for release 
+6. Click the `Release` button 
+7. Wait a few hours for sync to maven central...? 
 
 
 ### Signing:
@@ -19,7 +35,6 @@ Files are stored in the project root:
 ```
 /deoplice
   - signingkey
-  - signingpass
 ```
 
 #### Signing Key: 
@@ -42,7 +57,7 @@ But the encoding used when writing a file from a windows command prompt is wonky
 
 #### Signing Pass:
 
-The password is vanilla text. It can be retrieved from the appropriate password manager.
+The password is stored in gradle.properties as `signing.password`. 
 
 
 

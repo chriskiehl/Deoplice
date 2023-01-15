@@ -3,18 +3,13 @@ package deoplice.lenses;
 public interface Lens<A, B> {
     /**
      * A plain ol' getter. By default, Deoplice will assume all setters
-     * are prefixed with `get` in the usual camelCased fashion. This can be
-     * overridden via
-     * TODO: docs
+     * are prefixed with `get` in the usual camelCased fashion.
      */
     B get(A a);
 
     /**
-     * TODO: docs
      * An immutable "setter". By default, Deoplpice will assume Lombok's
-     * auto-generated @With is available and will
-     * is a good candidate for this. `toBuilder()` is another good option.
-     *
+     * auto-generated @With is available and use it for updates.
      */
     A set(A a, B b);
 

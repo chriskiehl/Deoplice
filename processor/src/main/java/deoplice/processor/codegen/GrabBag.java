@@ -151,8 +151,8 @@ public class GrabBag {
 
     /**
      * The raw (non-parameterized) type. e.g.
-     * Given `java.util.List<String>`
-     * This would return `java.util.List`
+     * Given {@literal `java.util.List<String>`}
+     * This would return {@literal `java.util.List`}
      */
     public static String nonParameterizedType(Element element) {
         String s = typeOf(element);
@@ -167,7 +167,7 @@ public class GrabBag {
     /**
      * The qualified type of the first generic type parameter. e.g.
      *
-     * java.util.List<java.lang.String> -> java.lang.String
+     * {@literal java.util.List<java.lang.String> -> java.lang.String}
      * TODO: eventually I'll handle types with more complex signatures.
      */
     public static String firstTypeParameter(Element element) {
@@ -314,6 +314,7 @@ public class GrabBag {
     /**
      * The root of a (potentially) deeply nested POJO hierarchy.
      * Given
+     * {@literal
      * ```
      * class Foo {
      *     Bar bar
@@ -323,6 +324,7 @@ public class GrabBag {
      * }
      * class Baz {...}
      * ```
+     * }
      * this would return the root owner: `Foo`
      */
     public static AST.Qualified rootClass(Extractions.ExtractedField field) {

@@ -8,7 +8,7 @@ group = "com.chriskiehl"
 version = "0.0.1"
 
 java {
-//    withJavadocJar()
+    withJavadocJar()
     withSourcesJar()
 }
 

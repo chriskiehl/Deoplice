@@ -8,7 +8,17 @@
 
 Deoplice is java library that automatically generates an API for transforming your immutable POJOs. It's *symbiotic* with [Lombok](https://projectlombok.org/) and picks up where [`@Value`](https://www.projectlombok.org/features/Value) and [`@With`](https://projectlombok.org/features/With) leave off. Say goodbye to tedious boilerplate when updating complex nested objects! With Deoplice, complicated, multi-level updates become trivial _one liners_. 
 
->Note! Deoplice is currently in alpha and may have some bugs lurking around. The author found annotation processing unexpectedly tricky, under-documented, and full of sharp edges. If you encounter any problems, pop over to the issues and let me know.  
+>Note! Deoplice is currently in alpha and may have some bugs lurking around. If you encounter any problems, pop over to the issues and let me know.  
+
+## Installation 
+
+Deoplice is on Maven and installable via your build tool of choice. 
+
+```
+implementation("com.chriskiehl:deoplice:0.0.1")  
+annotationProcessor("com.chriskiehl:deoplice:0.0.1")  
+```
+
 
 ## How does it work?
 
