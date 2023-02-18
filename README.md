@@ -177,7 +177,7 @@ import foo.bar.FooAPI;
 
 and you're off to the races! 
 
-**But the easier way is too...**
+**But the easier way is to...**
 
 Ignore all the specifics of build systems, annotation processing directories, and what goes where and just let your IDE figure it all out (it's very good at this!). Just type either `set`, `update`, and a collection method like `add`/`append` and your IDE will pull up all the options
 
@@ -188,6 +188,8 @@ Ignore all the specifics of build systems, annotation processing directories, an
 ## Lower level lens API
 
 Behind the scenes, Deoplice's compositional API magic is achieved by generating a set of [Lenses](https://en.wikibooks.org/wiki/Haskell/Lenses_and_functional_references) for every field in each of your annotated classes. What exactly is a Lens? It's some gobbledygook from functional programming. They're basically getters and setters that compose together really well. They're what gives Deoplice the ability to cleanly perform updates on deeply nested objects.
+
+>Want to learn more about how lenses are constructed? Checkout this [blog post](https://chriskiehl.com/article/practical-lenses)
 
 You'll find these lens classes in the build directory along side the generated API files. 
 
